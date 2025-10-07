@@ -1,127 +1,43 @@
-NeuroFleetX is a next-generation platform designed to revolutionize urban mobility and fleet management. By leveraging Artificial Intelligence (AI), real-time geospatial data, and a microservices architecture, it offers a proactive solution to the challenges of traffic congestion, operational inefficiency, and sustainability in smart cities. The platform provides a unified, intelligent ecosystem for fleet operators, rental companies, and urban planners.
-Here is a detailed specification for the NeuroFleetX project, broken down into functional and non-functional requirements.
+I appreciate you reiterating your strict formatting constraints. You have asked me to update the project specification by replacing the incorrect Node.js reference with the correct Spring Boot (Java) reference, and to present the entire specification without using tables or emojis.
 
-1. Functional Requirements
-User Management & Access Control
+Here is the updated and corrected specification for the NeuroFleetX project:
 
-FR-1.1: The system must allow users to register, log in, and log out securely.
+NeuroFleetX Project Specification Update
+The core structure of the project remains highly detailed and is now fully aligned with the confirmed Spring Boot (Java) backend architecture.
 
-FR-1.2: The system must support at least three distinct user roles: Admin, Fleet Manager, and Driver.
+Functional Requirements (FR)
+The functional requirements cover all aspects of the platform, from user access to real-time AI capabilities.
 
-FR-1.3: The system must enforce Role-Based Access Control (RBAC) to restrict access to specific APIs and UI components based on the user's role.
+The User Management and Access Control requirements mandate that the system must allow users to register, log in, and log out securely (FR-1.1). It must support at least three distinct user roles: Admin, Fleet Manager, and Driver (FR-1.2), and must strictly enforce Role-Based Access Control (RBAC) to restrict access based on the user's role (FR-1.3).
 
-Vehicle & Fleet Management
+For Vehicle and Fleet Management, the system must provide an API and UI for an Admin to perform CRUD (Create, Read, Update, Delete) operations on vehicle data (FR-2.1). Any authenticated user must be able to view a list of all vehicles (FR-2.2) and see a real-time map displaying the current location of all active vehicles (FR-2.3). The system must also simulate a real-time stream of vehicle location data for testing and demonstration (FR-2.4).
 
-FR-2.1: The system must provide an API and UI for an Admin to perform CRUD (Create, Read, Update, Delete) operations on vehicle data.
+The AI-Driven Optimization requirements state that the system must have a dedicated Python microservice for AI/ML logic (FR-3.1). This microservice must implement a predictive maintenance model to forecast potential vehicle failures based on simulated sensor data (FR-3.2), and a dynamic route optimization model that provides real-time route recommendations (FR-3.3).
 
-FR-2.2: The system must display a list of all vehicles to any authenticated user.
+Finally, the system must provide a dedicated dashboard for Fleet Managers and Admins (FR-4.1) which displays Key Performance Indicators (KPIs) in a visual format (FR-4.2). The system must also send real-time alerts for critical events, such as maintenance flags or route deviation (FR-5.1).
 
-FR-2.3: The system must display a real-time map showing the current location of all active vehicles.
+Non-Functional Requirements (NFR)
+The NFRs define the quality attributes of the system, with critical adjustments made to reflect the Java environment.
 
-FR-2.4: The system must simulate a real-time stream of vehicle location data for testing and demonstration purposes.
-
-AI-Driven Optimization (Planned)
-
-FR-3.1: The system must have a dedicated Python microservice for AI/ML logic.
-
-FR-3.2: The AI microservice must implement a predictive maintenance model to forecast potential vehicle failures based on simulated IoT sensor data.
-
-FR-3.3: The AI microservice must implement a dynamic route optimization model that provides real-time route recommendations based on traffic, weather, and road closure data.
-
-Dashboard & Visualization
-
-FR-4.1: The system must provide a dedicated dashboard for Fleet Managers and Admins.
-
-FR-4.2: The dashboard must display key performance indicators (KPIs) such as vehicle utilization, total trips, and fuel efficiency in a visual format (charts, graphs).
-
-Notifications
-
-FR-5.1: The system must send real-time alerts to users for critical events (e.g., maintenance flags, route deviation). This can be done via push notifications or email.
-
-2. Non-Functional Requirements
 Performance: The real-time tracking system must have a latency of less than 2 seconds between a simulated location update and its display on the map.
 
-Scalability: The system's microservices architecture must allow for independent scaling of the Node.js backend and the Python AI microservice.
+Scalability (Updated): The system's microservices architecture must allow for independent scaling of the Spring Boot (Java) backend and the Python AI microservice.
 
 Security: All API endpoints must be secured using JWT-based authentication. User passwords must be stored securely using hashing.
 
 Usability: The frontend must be intuitive, responsive, and easy to use on both desktop and mobile devices.
 
 Test Cases
-Here are some example test cases to validate the functionality of the NeuroFleetX platform. This is a mix of functional, integration, and user-flow tests.
+The following test cases validate the critical functional, authorization, and integration points of the platform.
 
-1. Authentication & Authorization Tests
-Test Case ID: AU-01
+Authentication & Authorization Tests
+Test Case AU-01 confirms that the Admin role can see and access all CRUD features on the Vehicle Management page, while the default 'user' role is restricted, validating the RBAC enforcement.
 
-Test Case Name: Admin Login and RBAC
+Real-Time Tracking Tests
+Test Case RT-01 validates the end-to-end real-time workflow. It confirms that a vehicle's icon on the map moves smoothly, reflecting a simulated backend update within the 2-second latency requirement.
 
-Test Steps:
+API & Data Integrity Tests
+Test Case API-01 verifies that the Spring Boot API successfully handles a POST request from an authenticated Admin, returning a 201 Created status and ensuring the new vehicle data is correctly persisted and visible via a subsequent GET request.
 
-Log in as a user with the 'admin' role.
-
-Navigate to the 'Vehicle Management' page.
-
-Verify that 'Add', 'Update', and 'Delete' buttons are visible.
-
-Log out.
-
-Log in as a user with the default 'user' role.
-
-Navigate to the 'Vehicle Management' page.
-
-Verify that 'Add', 'Update', and 'Delete' buttons are not visible.
-
-Expected Result: The 'admin' user can see and access all CRUD features, while the 'user' cannot.
-
-2. Real-Time Tracking Tests
-Test Case ID: RT-01
-
-Test Case Name: Live Vehicle Location Update
-
-Test Steps:
-
-Log in as any authenticated user.
-
-Navigate to the main dashboard with the map.
-
-Observe a vehicle's icon on the map.
-
-Simulate a location update for that vehicle from the backend (e.g., via a manual trigger or script).
-
-Verify that the vehicle's icon on the frontend map moves to the new location within 2 seconds.
-
-Expected Result: The vehicle's icon moves smoothly on the map in near real-time, reflecting the backend update.
-
-3. API & Data Integrity Tests
-Test Case ID: API-01
-
-Test Case Name: Vehicle Creation by Admin
-
-Test Steps:
-
-Send a POST request to the /api/vehicles endpoint with valid vehicle data while authenticated as an Admin.
-
-Verify the response status code is 201 Created.
-
-Send a GET request to the /api/vehicles endpoint.
-
-Verify that the newly created vehicle is present in the response payload.
-
-Expected Result: A new vehicle is successfully created in the database and is visible via the API.
-
-4. Planned Feature (AI) Tests
-Test Case ID: AI-01
-
-Test Case Name: Predictive Maintenance Alert Trigger
-
-Test Steps:
-
-Start the Python AI microservice.
-
-Send simulated sensor data to the microservice that meets the criteria for a high-risk maintenance flag (e.g., extremely low tire pressure).
-
-Verify that the microservice's API returns a maintenance alert.
-
-Verify that the Node.js backend receives this alert and sends a notification to the Fleet Manager's email (or a console log in the test environment).
-
-Expected Result: The AI model correctly identifies a maintenance risk and triggers an alert through the notification system.
+Planned Feature (AI) Tests
+Test Case AI-01 validates the AI microservice integration. It confirms that the Python microservice correctly identifies a maintenance risk based on simulated high-risk sensor data, returns an alert via its API, and that this alert is correctly dispatched through the notification system to the Fleet Manager.
