@@ -7,6 +7,9 @@ function VehicleList({ refreshTrigger, onEdit }) {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openHistoryFor, setOpenHistoryFor] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -30,6 +33,27 @@ function VehicleList({ refreshTrigger, onEdit }) {
   if (loading) return <div className="panel">Loading vehicles...</div>;
   if (error) return <div className="panel">Error: {error}</div>;
 
+  const toggleHistory = async (id) => {
+    if (openHistoryFor === id) {
+      setOpenHistoryFor(null);
+      setHistory([]);
+      return;
+    }
+    try {
+      setHistoryLoading(true);
+      const token = await currentUser.getIdToken();
+      const res = await axios.get(`http://localhost:3001/api/vehicles/${id}/history`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setHistory(res.data.events || []);
+      setOpenHistoryFor(id);
+    } catch (e) {
+      console.error('Failed to load history', e);
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
   return (
     <div className="panel">
       <div className="row" style={{ justifyContent: 'space-between' }}>
@@ -42,7 +66,10 @@ function VehicleList({ refreshTrigger, onEdit }) {
             <div>
               <strong>{vehicle.make} {vehicle.model}</strong> - {vehicle.licensePlate} <span className="badge">{vehicle.status}</span>
             </div>
-            <div className="row">
+            <div className="row" style={{ gap: 8 }}>
+              <button className="button outline" onClick={() => toggleHistory(vehicle.id)}>
+                {openHistoryFor === vehicle.id ? 'Hide History' : 'Show History'}
+              </button>
               {role === 'admin' && (
                 <button className="button outline" onClick={() => onEdit(vehicle)}>Edit</button>
               )}
@@ -66,6 +93,25 @@ function VehicleList({ refreshTrigger, onEdit }) {
                 }}>Delete</button>
               )}
             </div>
+            {openHistoryFor === vehicle.id && (
+              <div style={{ marginTop: 8, padding: 8, border: '1px dashed #334155', borderRadius: 8 }}>
+                {historyLoading ? (
+                  <div>Loading history...</div>
+                ) : history.length === 0 ? (
+                  <div>No history yet.</div>
+                ) : (
+                  <ul style={{ marginLeft: 16 }}>
+                    {history.map(evt => (
+                      <li key={evt.id}>
+                        <span className="badge" style={{ marginRight: 8 }}>{evt.eventType}</span>
+                        {new Date(evt.timestamp._seconds ? evt.timestamp._seconds * 1000 : evt.timestamp).toLocaleString()}
+                        {evt.actorUid ? ` by ${evt.actorUid}` : ''}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
           </li>
         ))}
       </ul>
