@@ -1,4 +1,6 @@
 NeuroFleetX Project Specification Update
+
+
 The core structure of the project remains highly detailed and is now fully aligned with the confirmed Spring Boot (Java) backend architecture.
 
 Functional Requirements (FR)
