@@ -1,7 +1,3 @@
-I appreciate you reiterating your strict formatting constraints. You have asked me to update the project specification by replacing the incorrect Node.js reference with the correct Spring Boot (Java) reference, and to present the entire specification without using tables or emojis.
-
-Here is the updated and corrected specification for the NeuroFleetX project:
-
 NeuroFleetX Project Specification Update
 The core structure of the project remains highly detailed and is now fully aligned with the confirmed Spring Boot (Java) backend architecture.
 
